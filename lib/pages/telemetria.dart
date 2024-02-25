@@ -1,5 +1,7 @@
 // ignore_for_file: prefer_const_constructors, avoid_print
 
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 
@@ -50,13 +52,29 @@ return LineChart(
 
 class Telemetria extends StatefulWidget {
   const Telemetria({super.key});
-
+  
   @override
   State<Telemetria> createState() => _TelemetriaState();
 }
 
 class _TelemetriaState extends State<Telemetria> {
+  double seconds = 0;
+  
+  // Sou incapaz de atualizar esse widget assim que o dados chegam
+  // Já gastei 2h30 tentando fazer isso e não consegui, portanto
+  // vou criar um timer pra atualizar a cada 1 segundo
+  @override
+  void initState(){
+    super.initState();
 
+    Timer.periodic(Duration(seconds: 1), (Timer t) {
+       setState(() {
+         Dados.inserirDado(Dados.combustivel, seconds);
+         seconds++;
+       });
+     });
+  }
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -68,6 +86,10 @@ class _TelemetriaState extends State<Telemetria> {
           SizedBox(
             height: 500,
             child: Dados.combustivel
+          ),
+          SizedBox(
+            height: 500,
+            child: Dados.velocidade
           ),
         ],
       )
@@ -107,29 +129,54 @@ class Dados{
     "combustivel (%)",
     0, 100,
     [
-      FlSpot(0, 0),
-      FlSpot(1, 10),
-      FlSpot(2, 15),
-      FlSpot(3, 15.6),
-      FlSpot(4, 20),
-      FlSpot(5, 21),
-      FlSpot(6, 25),
-      FlSpot(7, 25.6),
-      FlSpot(8, 24),
-      FlSpot(9, 20),
-      FlSpot(10, 20.1),
-      FlSpot(11, 50.2),
-      FlSpot(12, 55),
-      FlSpot(13, 14.2),
-      FlSpot(14, 51),
-      FlSpot(15, 51),
-      FlSpot(16, 12),
-      FlSpot(17, 92),
-      FlSpot(18, 32),
-      FlSpot(19, 64),
-      FlSpot(20, 14),
+      FlSpot(0, 100),
+      FlSpot(1, 98),
+      FlSpot(2, 95),
+      FlSpot(3, 93),
+      FlSpot(4, 92),
+      FlSpot(5, 91),
+      FlSpot(6, 80),
+      FlSpot(7, 77),
+      FlSpot(8, 74),
+      FlSpot(9, 71),
+      FlSpot(10,70),
+      FlSpot(11, 64),
+      FlSpot(12, 62),
+      FlSpot(13, 60),
+      FlSpot(14, 55),
+      FlSpot(15, 54.5),
+      FlSpot(16, 54),
+      FlSpot(17, 40),
+      FlSpot(18, 38),
+      FlSpot(19, 30),
+      FlSpot(20, 20),
     ]
   );
+  
+  static LineChart velocidade = criarGrafico("Velocidade (km/h)", 0, 50, 
+  [
+      FlSpot(0, 0),
+      FlSpot(1, 10),
+      FlSpot(2, 10.5),
+      FlSpot(3, 11),
+      FlSpot(4, 11.89),
+      FlSpot(5, 12),
+      FlSpot(6, 12),
+      FlSpot(7, 12),
+      FlSpot(8, 12.5),
+      FlSpot(9, 12.9),
+      FlSpot(10,13),
+      FlSpot(11,14),
+      FlSpot(12,15),
+      FlSpot(13,18),
+      FlSpot(14,20),
+      FlSpot(15,24),
+      FlSpot(16,28),
+      FlSpot(17,29),
+      FlSpot(18,30),
+      FlSpot(19,30.1),
+      FlSpot(20,30.5),
+  ]);
 }
 
 
