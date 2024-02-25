@@ -14,7 +14,7 @@ class _MapaState extends State<Mapa> {
   Widget build(BuildContext context) {
     return Scaffold(
     appBar: AppBar(
-      title: const Text("Mapa"),
+      title: const Text("Mapa Baja"),
     ),
     body: GoogleMap(initialCameraPosition: CameraPosition(
       target: LatLng(-22.816837154373108, -47.069913411788164),
