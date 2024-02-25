@@ -16,10 +16,14 @@ class _MapaState extends State<Mapa> {
     appBar: AppBar(
       title: const Text("Mapa Baja"),
     ),
-    body: GoogleMap(initialCameraPosition: CameraPosition(
-      target: LatLng(-22.816837154373108, -47.069913411788164),
-      zoom: 18)
-      )
+    body: const GoogleMap(
+      initialCameraPosition: CameraPosition(
+        target: LatLng(-22.816837154373108, -47.069913411788164),
+        zoom: 18,
+        ),
+      mapType: MapType.satellite,
+      myLocationEnabled: true,
+      ),
     );
   }
 }
