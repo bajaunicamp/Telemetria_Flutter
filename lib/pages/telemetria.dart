@@ -1,26 +1,46 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, avoid_print
 
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 
 // Função para criar diversos gráficos com o mesmo design
-LineChart criarGrafico(String title, double minX, double maxX, double minY, double maxY, List<FlSpot> spots) {
+LineChart criarGrafico(String title, double minY, double maxY, List<FlSpot> spots) {
 return LineChart(
       LineChartData(
-        titlesData: FlTitlesData(topTitles: AxisTitles(
-          axisNameWidget: Text(title)
-        )),
-        minX: minX, maxX: maxX, minY: minY, maxY: maxY,
+        titlesData: FlTitlesData(
+        
+          // Esconder os valores em baixo
+          bottomTitles: AxisTitles(
+            sideTitles: SideTitles(
+              showTitles: false,
+            )
+          ),
+          // Título do gráfico
+          topTitles: AxisTitles(
+            axisNameSize: 80,
+            axisNameWidget: Text(
+              title,
+              style: TextStyle( 
+                fontSize: 20
+              ),
+            )
+          ),
+        ),
+        minX: 0, maxX: 20, minY: minY, maxY: maxY,
         gridData: FlGridData(
           show: true,
           getDrawingHorizontalLine: (value) =>
           FlLine(
             color: Color.fromARGB(139, 255, 0, 0),
             strokeWidth: 2,
+          ),
+          getDrawingVerticalLine: (value) => FlLine(
+            strokeWidth: 0
           )
         ),
         lineBarsData: [
           LineChartBarData(
+            isCurved: true,
             spots: spots,
           )
         ]
@@ -72,9 +92,9 @@ class Dados{
       print("Iniciando scroll");
       // Primeiramente diminuímos em 1 o x dos spots seguintes
       for(int i = 1; i<dataLength; i++){
-        double current_y = lineChart.data.lineBarsData[0].spots[i].y;
-        print("[$i, $current_y] -> [${i-1}, $current_y]");
-        lineChart.data.lineBarsData[0].spots[i-1] = FlSpot(i-1, current_y);
+        double currentY = lineChart.data.lineBarsData[0].spots[i].y;
+        print("[$i, $currentY] -> [${i-1}, $currentY]");
+        lineChart.data.lineBarsData[0].spots[i-1] = FlSpot(i-1, currentY);
       }
       
       // Em seguida, adicionamos o novo spot na última posição
@@ -85,7 +105,7 @@ class Dados{
 
   static LineChart combustivel = criarGrafico(
     "combustivel (%)",
-    0, 20, 0, 100,
+    0, 100,
     [
       FlSpot(0, 0),
       FlSpot(1, 10),
