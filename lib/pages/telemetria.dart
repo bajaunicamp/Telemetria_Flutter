@@ -1,6 +1,5 @@
 // ignore_for_file: prefer_const_constructors, avoid_print
 
-import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
@@ -67,12 +66,6 @@ class _TelemetriaState extends State<Telemetria> {
   void initState(){
     super.initState();
 
-    Timer.periodic(Duration(seconds: 1), (Timer t) {
-       setState(() {
-         Dados.inserirDado(Dados.combustivel, seconds);
-         seconds++;
-       });
-     });
   }
   
   @override
