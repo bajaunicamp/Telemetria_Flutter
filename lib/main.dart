@@ -5,11 +5,15 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_config/flutter_config.dart';
 import 'package:telemetria_baja/pages/mapa.dart';
 import 'package:telemetria_baja/pages/telemetria.dart';
 //import 'package:flutter/widgets.dart';
 
-void main() {
+void main() async{
+  // Mapa
+  WidgetsFlutterBinding.ensureInitialized();
+  await FlutterConfig.loadEnvVariables();
   runApp(const MainApp());
 }
 
