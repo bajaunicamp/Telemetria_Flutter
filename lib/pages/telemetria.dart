@@ -18,17 +18,8 @@ class Telemetria extends StatefulWidget {
 }
 
 class _TelemetriaState extends State<Telemetria> {
-  double seconds = 0;
-  
-  // Sou incapaz de atualizar esse widget assim que o dados chegam
-  // Já gastei 2h30 tentando fazer isso e não consegui, portanto
-  // vou criar um timer pra atualizar a cada 1 segundo
-  @override
-  void initState(){
-    super.initState();
+  List<FlSpot> spots = combustivel.spots;
 
-  }
-  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,17 +30,11 @@ class _TelemetriaState extends State<Telemetria> {
         children: [
           SizedBox(
             height: 500,
-            child: ListenableBuilder(
-              listenable: combustivel,
-              builder: (context, child) {
-                return combustivel.grafico;
-              },
-            )
-            //combustivel.grafico
-          ),
+            child: combustivel.grafico
+            ),
           ElevatedButton(
-           onPressed: (){
-            combustivel.inserirDado(10);
+           onPressed: (){      
+              combustivel.inserirDado(10);
            },
            child: Text("Inserir dado"),
          )
@@ -62,12 +47,12 @@ class _TelemetriaState extends State<Telemetria> {
 // Esta classe serve para disponibilizar os dados para público
 class Dado with ChangeNotifier{
 
-  late LineChart grafico;
+  late ListenableBuilder grafico;
 
   final String title;
   final double minY;
   final double maxY;
-
+  
   List<FlSpot> spots = [
       FlSpot(0, 100),
       FlSpot(1, 98),
@@ -100,7 +85,10 @@ class Dado with ChangeNotifier{
     grafico = criarGrafico(title, minY, maxY, spots);
   }
   
-  LineChart criarGrafico(String title, double minY, double maxY, List<FlSpot> spots) =>
+  ListenableBuilder criarGrafico(String title, double minY, double maxY, List<FlSpot> spots) =>
+   ListenableBuilder(
+    listenable: this, 
+    builder: (context, child) =>
    LineChart(
         LineChartData(
           titlesData: FlTitlesData(
@@ -141,14 +129,16 @@ class Dado with ChangeNotifier{
             )
           ]
         )
-  );
+      )
+   );
 
   void inserirDado(double y) {
-    int dataLength = grafico.data.lineBarsData[0].spots.length;
+    int dataLength = spots.length;
+    int maxX = 20;
     // Enquanto o gráfico não tiver sido preenchido até a borda direita,
     // Apenas adicionar dados sem mover o gráfico
-    if( dataLength < grafico.data.maxX){
-      grafico.data.lineBarsData[0].spots.add(
+    if( dataLength < maxX){
+      spots.add(
         FlSpot(dataLength.toDouble(), y)
       );
     }
@@ -157,14 +147,14 @@ class Dado with ChangeNotifier{
       print("Iniciando scroll");
       // Primeiramente diminuímos em 1 o x dos spots seguintes
       for(int i = 1; i<dataLength; i++){
-        double currentY = grafico.data.lineBarsData[0].spots[i].y;
+        double currentY = spots[i].y;
         print("[$i, $currentY] -> [${i-1}, $currentY]");
-        grafico.data.lineBarsData[0].spots[i-1] = FlSpot(i-1, currentY);
+        spots[i-1] = FlSpot(i-1, currentY);
       }
       
       // Em seguida, adicionamos o novo spot na última posição
-      grafico.data.lineBarsData[0].spots[dataLength-1] = FlSpot(dataLength-1, y);
-      print("[20, ${grafico.data.lineBarsData[0].spots[dataLength-1].y}]");
+      spots[dataLength-1] = FlSpot(dataLength-1, y);
+      print("[20, ${spots[dataLength-1].y}]");
     }
     notifyListeners();
   }
