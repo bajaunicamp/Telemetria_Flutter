@@ -51,6 +51,7 @@ class _MainAppState extends State<MainApp> {
                 children: [
                   Builder(builder: (context) => ElevatedButton(
                     onPressed: (){
+                      pedirAcessoALocalizacao();
                       Navigator.pushNamed(context, '/mapa');
                     },
                     child: Text("Mapa")
