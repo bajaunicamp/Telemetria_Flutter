@@ -1,5 +1,8 @@
 // ignore_for_file: prefer_const_constructors, avoid_print
 
+// Me desculpem pelo main gigante, mas to sem tempo de dividir essee código com arquivos menores
+// Provavelmente criar uma classe pra lidar com o servidor seria muito mais inteligente, mas
+// fazer o que
 
 import 'dart:io';
 import 'dart:typed_data';
@@ -120,10 +123,16 @@ class _MainAppState extends State<MainApp> {
                       port = int.parse(port_controller.text);
                     }
                 });
-                conectarAoServidor();
-                setState(() {
-                  conectado = true;
-                });
+                // Tentei implementar uns try-catch, mas to sem tempo. Então
+                // pra conectar no servidor tem que fazer tudo certinho
+                try{
+                  conectarAoServidor();
+                  setState(() {
+                    conectado = true;
+                  });
+                } catch(e){
+                  print(e);
+                }
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Color.fromARGB(255, 11, 230, 40),
@@ -182,8 +191,14 @@ class _MainAppState extends State<MainApp> {
     }
   }
   
+  // Eu sei que essa função provavelmente não deveria estar aqui, mas ela está
   Future<void> conectarAoServidor() async{
-    socket = await Socket.connect(serverIP, port);
+    try{
+      socket = await Socket.connect(serverIP, port);
+    } catch(e){
+      print("[SERVIDOR] Não foi possível conectar: $e");
+      return Future.error(e);
+    }
     print("[CONECTADO] Cliente conectado ao servidor ${socket.remoteAddress.address}:${socket.remotePort}");
     
     socket.listen(
