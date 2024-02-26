@@ -43,14 +43,14 @@ class _MapaState extends State<Mapa> {
     else{
       return Column(
         children: [
-          Text("Você não permitiu o acesso à localização"),
+          const Text("Você não permitiu o acesso à localização"),
           ElevatedButton(
             onPressed: () {
               setState(() {
                 pedirAcessoALocalizacao();
               });
             },
-            child: Text("Pedir acesso à localização")
+            child: const Text("Pedir acesso à localização")
           )
         ]
       );
