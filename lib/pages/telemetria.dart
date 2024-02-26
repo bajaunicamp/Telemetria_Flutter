@@ -39,8 +39,20 @@ class _TelemetriaState extends State<Telemetria> {
         children: [
           SizedBox(
             height: 500,
-            child: combustivel.grafico
+            child: ListenableBuilder(
+              listenable: combustivel,
+              builder: (context, child) {
+                return combustivel.grafico;
+              },
+            )
+            //combustivel.grafico
           ),
+          ElevatedButton(
+           onPressed: (){
+            combustivel.inserirDado(10);
+           },
+           child: Text("Inserir dado"),
+         )
         ],
       )
     );
@@ -131,7 +143,7 @@ class Dado with ChangeNotifier{
         )
   );
 
-  void inserirDado(y) {
+  void inserirDado(double y) {
     int dataLength = grafico.data.lineBarsData[0].spots.length;
     // Enquanto o gráfico não tiver sido preenchido até a borda direita,
     // Apenas adicionar dados sem mover o gráfico
