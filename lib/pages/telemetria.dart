@@ -31,13 +31,7 @@ class _TelemetriaState extends State<Telemetria> {
           SizedBox(
             height: 500,
             child: combustivel.grafico
-            ),
-          ElevatedButton(
-           onPressed: (){      
-              combustivel.inserirDado(10);
-           },
-           child: Text("Inserir dado"),
-         )
+          ),
         ],
       )
     );
