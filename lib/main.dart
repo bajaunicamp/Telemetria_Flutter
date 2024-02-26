@@ -194,12 +194,12 @@ class _MainAppState extends State<MainApp> {
         // Se for uma resposta de GPS
         if (splitResponse[0].compareTo("[VELOCIDADE]") == 0){
           print("Dados de velocidade recebidos");
-          Dados.inserirDado(Dados.velocidade, double.parse(splitResponse[1]));
+          //Dados.inserirDado(Dados.velocidade, double.parse(splitResponse[1]));
         }
         // Se for uma resposta do Combustível
         else if (splitResponse[0].compareTo("[COMBUSTIVEL]") == 0){
           print("Dados do combustível recebidos");
-          Dados.inserirDado(Dados.combustivel, double.parse(splitResponse[1]));
+          combustivel.inserirDado(double.parse(splitResponse[1]));
         } 
         // Se não for nenhuma das respostas esperadas, apenas imprimí-la
         else {

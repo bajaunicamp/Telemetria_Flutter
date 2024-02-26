@@ -4,50 +4,11 @@
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 
-// Função para criar diversos gráficos com o mesmo design
-LineChart criarGrafico(String title, double minY, double maxY, List<FlSpot> spots) {
-return LineChart(
-      LineChartData(
-        titlesData: FlTitlesData(
-        
-          // Esconder os valores em baixo
-          bottomTitles: AxisTitles(
-            sideTitles: SideTitles(
-              showTitles: false,
-            )
-          ),
-          // Título do gráfico
-          topTitles: AxisTitles(
-            axisNameSize: 80,
-            axisNameWidget: Text(
-              title,
-              style: TextStyle( 
-                fontSize: 20
-              ),
-            )
-          ),
-        ),
-        minX: 0, maxX: 20, minY: minY, maxY: maxY,
-        gridData: FlGridData(
-          show: true,
-          getDrawingHorizontalLine: (value) =>
-          FlLine(
-            color: Color.fromARGB(139, 255, 0, 0),
-            strokeWidth: 2,
-          ),
-          getDrawingVerticalLine: (value) => FlLine(
-            strokeWidth: 0
-          )
-        ),
-        lineBarsData: [
-          LineChartBarData(
-            isCurved: true,
-            spots: spots,
-          )
-        ]
-      )
+Dado combustivel = Dado(
+  maxY: 100,
+  minY: 0,
+  title: "combustivel (%)"
 );
-}
 
 class Telemetria extends StatefulWidget {
   const Telemetria({super.key});
@@ -78,11 +39,7 @@ class _TelemetriaState extends State<Telemetria> {
         children: [
           SizedBox(
             height: 500,
-            child: Dados.combustivel
-          ),
-          SizedBox(
-            height: 500,
-            child: Dados.velocidade
+            child: combustivel.grafico
           ),
         ],
       )
@@ -91,37 +48,15 @@ class _TelemetriaState extends State<Telemetria> {
 }
 
 // Esta classe serve para disponibilizar os dados para público
-class Dados{
-  
-  static void inserirDado(LineChart lineChart, y) {
-    int dataLength = lineChart.data.lineBarsData[0].spots.length;
-    // Enquanto o gráfico não tiver sido preenchido até a borda direita,
-    // Apenas adicionar dados sem mover o gráfico
-    if( dataLength < lineChart.data.maxX){
-      lineChart.data.lineBarsData[0].spots.add(
-        FlSpot(dataLength.toDouble(), y)
-      );
-    }
-    // Se a quantidade de dados fizer com que seja necessário o scroll
-    else{
-      print("Iniciando scroll");
-      // Primeiramente diminuímos em 1 o x dos spots seguintes
-      for(int i = 1; i<dataLength; i++){
-        double currentY = lineChart.data.lineBarsData[0].spots[i].y;
-        print("[$i, $currentY] -> [${i-1}, $currentY]");
-        lineChart.data.lineBarsData[0].spots[i-1] = FlSpot(i-1, currentY);
-      }
-      
-      // Em seguida, adicionamos o novo spot na última posição
-      lineChart.data.lineBarsData[0].spots[dataLength-1] = FlSpot(dataLength-1, y);
-      print("[20, ${lineChart.data.lineBarsData[0].spots[dataLength-1].y}]");
-    }
-  }
+class Dado with ChangeNotifier{
 
-  static LineChart combustivel = criarGrafico(
-    "combustivel (%)",
-    0, 100,
-    [
+  late LineChart grafico;
+
+  final String title;
+  final double minY;
+  final double maxY;
+
+  List<FlSpot> spots = [
       FlSpot(0, 100),
       FlSpot(1, 98),
       FlSpot(2, 95),
@@ -143,33 +78,85 @@ class Dados{
       FlSpot(18, 38),
       FlSpot(19, 30),
       FlSpot(20, 20),
-    ]
-  );
+  ];
+
+  Dado({
+    required this.title,
+    required this.minY,
+    required this.maxY,
+  }){
+    grafico = criarGrafico(title, minY, maxY, spots);
+  }
   
-  static LineChart velocidade = criarGrafico("Velocidade (km/h)", 0, 50, 
-  [
-      FlSpot(0, 0),
-      FlSpot(1, 10),
-      FlSpot(2, 10.5),
-      FlSpot(3, 11),
-      FlSpot(4, 11.89),
-      FlSpot(5, 12),
-      FlSpot(6, 12),
-      FlSpot(7, 12),
-      FlSpot(8, 12.5),
-      FlSpot(9, 12.9),
-      FlSpot(10,13),
-      FlSpot(11,14),
-      FlSpot(12,15),
-      FlSpot(13,18),
-      FlSpot(14,20),
-      FlSpot(15,24),
-      FlSpot(16,28),
-      FlSpot(17,29),
-      FlSpot(18,30),
-      FlSpot(19,30.1),
-      FlSpot(20,30.5),
-  ]);
+  LineChart criarGrafico(String title, double minY, double maxY, List<FlSpot> spots) =>
+   LineChart(
+        LineChartData(
+          titlesData: FlTitlesData(
+          
+            // Esconder os valores em baixo
+            bottomTitles: AxisTitles(
+              sideTitles: SideTitles(
+                showTitles: false,
+              )
+            ),
+            // Título do gráfico
+            topTitles: AxisTitles(
+              axisNameSize: 80,
+              axisNameWidget: Text(
+                title,
+                style: TextStyle( 
+                  fontSize: 20
+                ),
+              )
+            ),
+          ),
+          minX: 0, maxX: 20, minY: minY, maxY: maxY,
+          gridData: FlGridData(
+            show: true,
+            getDrawingHorizontalLine: (value) =>
+            FlLine(
+              color: Color.fromARGB(139, 255, 0, 0),
+              strokeWidth: 2,
+            ),
+            getDrawingVerticalLine: (value) => FlLine(
+              strokeWidth: 0
+            )
+          ),
+          lineBarsData: [
+            LineChartBarData(
+              isCurved: true,
+              spots: spots,
+            )
+          ]
+        )
+  );
+
+  void inserirDado(y) {
+    int dataLength = grafico.data.lineBarsData[0].spots.length;
+    // Enquanto o gráfico não tiver sido preenchido até a borda direita,
+    // Apenas adicionar dados sem mover o gráfico
+    if( dataLength < grafico.data.maxX){
+      grafico.data.lineBarsData[0].spots.add(
+        FlSpot(dataLength.toDouble(), y)
+      );
+    }
+    // Se a quantidade de dados fizer com que seja necessário o scroll
+    else{
+      print("Iniciando scroll");
+      // Primeiramente diminuímos em 1 o x dos spots seguintes
+      for(int i = 1; i<dataLength; i++){
+        double currentY = grafico.data.lineBarsData[0].spots[i].y;
+        print("[$i, $currentY] -> [${i-1}, $currentY]");
+        grafico.data.lineBarsData[0].spots[i-1] = FlSpot(i-1, currentY);
+      }
+      
+      // Em seguida, adicionamos o novo spot na última posição
+      grafico.data.lineBarsData[0].spots[dataLength-1] = FlSpot(dataLength-1, y);
+      print("[20, ${grafico.data.lineBarsData[0].spots[dataLength-1].y}]");
+    }
+    notifyListeners();
+  }
+
 }
 
 
