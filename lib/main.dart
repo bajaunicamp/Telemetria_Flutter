@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, avoid_print
+// ignore_for_file: prefer_const_constructors, avoid_print, non_constant_identifier_names
 
 // Me desculpem pelo main gigante, mas to sem tempo de dividir essee código com arquivos menores
 // Provavelmente criar uma classe pra lidar com o servidor seria muito mais inteligente, mas
@@ -9,6 +9,7 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_config/flutter_config.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:telemetria_baja/pages/mapa.dart';
 import 'package:telemetria_baja/pages/telemetria.dart';
 //import 'package:flutter/widgets.dart';
@@ -17,6 +18,7 @@ void main() async{
   // Mapa
   WidgetsFlutterBinding.ensureInitialized();
   await FlutterConfig.loadEnvVariables();
+  
   runApp(const MainApp());
 }
 
@@ -80,7 +82,6 @@ class _MainAppState extends State<MainApp> {
   bool conectado = false;
   late Socket socket;
 
-  // ignore: non_constant_identifier_names
   Widget widgetServidor() {
     // ignore: sized_box_for_whitespace
     Widget conectar = Container(
@@ -206,16 +207,24 @@ class _MainAppState extends State<MainApp> {
         final serverResponse = String.fromCharCodes(data);
         
         List<String> splitResponse = serverResponse.split(" ");
+        String tipo = splitResponse[0];
         // Se for uma resposta de GPS
-        if (splitResponse[0].compareTo("[VELOCIDADE]") == 0){
+        if (tipo.compareTo("[VELOCIDADE]") == 0){
           print("Dados de velocidade recebidos");
-          //Dados.inserirDado(Dados.velocidade, double.parse(splitResponse[1]));
+          velocidade.inserirDado(double.parse(splitResponse[1]));
         }
         // Se for uma resposta do Combustível
-        else if (splitResponse[0].compareTo("[COMBUSTIVEL]") == 0){
+        else if (tipo.compareTo("[COMBUSTIVEL]") == 0){
           print("Dados do combustível recebidos");
           combustivel.inserirDado(double.parse(splitResponse[1]));
-        } 
+        }
+        else if (tipo.compareTo("[POSICAO]") == 0){
+          print("Dados da posição recebidos");
+          posicaoBaja.atualizarPosicao(
+            double.parse(splitResponse[1]), // Latitude
+            double.parse(splitResponse[2])  // Longitude
+          );
+        }
         // Se não for nenhuma das respostas esperadas, apenas imprimí-la
         else {
           print("[SERVER] $serverResponse");

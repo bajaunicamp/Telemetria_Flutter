@@ -10,6 +10,12 @@ Dado combustivel = Dado(
   title: "combustivel (%)"
 );
 
+Dado velocidade = Dado(
+  maxY: 50,
+  minY: 0,
+  title: "velocidade (km/h)"
+);
+
 class Telemetria extends StatefulWidget {
   const Telemetria({super.key});
   
@@ -32,6 +38,10 @@ class _TelemetriaState extends State<Telemetria> {
             height: 500,
             child: combustivel.grafico
           ),
+          SizedBox(
+            height: 500,
+            child: velocidade.grafico
+          ),
         ],
       )
     );
@@ -48,27 +58,6 @@ class Dado with ChangeNotifier{
   final double maxY;
   
   List<FlSpot> spots = [
-      FlSpot(0, 100),
-      FlSpot(1, 98),
-      FlSpot(2, 95),
-      FlSpot(3, 93),
-      FlSpot(4, 92),
-      FlSpot(5, 91),
-      FlSpot(6, 80),
-      FlSpot(7, 77),
-      FlSpot(8, 74),
-      FlSpot(9, 71),
-      FlSpot(10,70),
-      FlSpot(11, 64),
-      FlSpot(12, 62),
-      FlSpot(13, 60),
-      FlSpot(14, 55),
-      FlSpot(15, 54.5),
-      FlSpot(16, 54),
-      FlSpot(17, 40),
-      FlSpot(18, 38),
-      FlSpot(19, 30),
-      FlSpot(20, 20),
   ];
 
   Dado({
