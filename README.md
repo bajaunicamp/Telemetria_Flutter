@@ -1,3 +1,6 @@
-# telemetria_baja
+# Telemetria Flutter
 
-A new Flutter project.
+## API KEY MAPS
+
+Este código não contém a API KEY, para compilá-lo é necessário criar um
+arquivo .env
