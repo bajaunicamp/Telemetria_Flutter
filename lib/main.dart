@@ -9,7 +9,6 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_config/flutter_config.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:telemetria_baja/pages/mapa.dart';
 import 'package:telemetria_baja/pages/telemetria.dart';
 //import 'package:flutter/widgets.dart';
@@ -215,6 +214,10 @@ class _MainAppState extends State<MainApp> {
           print("Dados de velocidade recebidos");
           velocidade.inserirDado(double.parse(splitResponse[1]));
         }
+        else if (tipo.compareTo("[TPMS]") == 0){
+          print("Dados do TPMS recebidos");
+          tpms.inserirDado(double.parse(splitResponse[1]));
+        }
         // Se for uma resposta do Combustível
         else if (tipo.compareTo("[COMBUSTIVEL]") == 0){
           print("Dados do combustível recebidos");
@@ -234,10 +237,16 @@ class _MainAppState extends State<MainApp> {
       },
       onError: (error){
         print("[ERROR] $error");
+        setState(() {
+            conectado = false;
+        });
         socket.destroy();
       },
       onDone: (){
         print("[END] A conexão com o servidor terminou");
+        setState(() {
+            conectado = false;
+        });
         socket.destroy();
       }
 

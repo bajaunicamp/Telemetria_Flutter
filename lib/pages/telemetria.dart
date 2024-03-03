@@ -16,6 +16,14 @@ Dado velocidade = Dado(
   title: "velocidade (km/h)"
 );
 
+// Como o TPMS não está funcionando atualmente, esse gráfico é apenas ilustrativo pra
+// mostrar pros juízes que o TPMS não está funcionando
+Dado tpms = Dado(
+  title: "Pressão dos Pneus",
+  minY: 0,
+  maxY: 30
+);
+
 class Telemetria extends StatefulWidget {
   const Telemetria({super.key});
   
@@ -36,11 +44,11 @@ class _TelemetriaState extends State<Telemetria> {
         children: [
           SizedBox(
             height: 500,
-            child: combustivel.grafico
+            child: velocidade.grafico
           ),
           SizedBox(
             height: 500,
-            child: velocidade.grafico
+            child: tpms.grafico
           ),
         ],
       )
@@ -141,7 +149,4 @@ class Dado with ChangeNotifier{
     }
     notifyListeners();
   }
-
 }
-
-
