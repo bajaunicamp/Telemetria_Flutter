@@ -201,6 +201,8 @@ class _MainAppState extends State<MainApp> {
       return Future.error(e);
     }
     print("[CONECTADO] Cliente conectado ao servidor ${socket.remoteAddress.address}:${socket.remotePort}");
+    enviarMensagemAoServidor("[CONNECTION] App");
+
     
     socket.listen(
       (Uint8List data) {
@@ -243,8 +245,6 @@ class _MainAppState extends State<MainApp> {
   } 
   
   void enviarMensagemAoServidor(String mensagem) {
-    int messageLength = mensagem.length;
-    socket.write(messageLength.toString());
     socket.write(mensagem);
   }
 }
