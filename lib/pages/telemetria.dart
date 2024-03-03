@@ -16,8 +16,9 @@ Dado velocidade = Dado(
   title: "velocidade (km/h)"
 );
 
-// Como o TPMS não está funcionando atualmente, esse gráfico é apenas ilustrativo pra
-// mostrar pros juízes que o TPMS não está funcionando
+// Como o TPMS não está funcionando como deverial atualmente, esse gráfico é apenas ilustrativo pra
+// mostrar pros juízes que o TPMS não está funcionando. O gráfico verdadeiro do tpms deverá conter
+// quatro linhas, uma pra cada pneu e adicionar uma legenda em baixo 
 Dado tpms = Dado(
   title: "Pressão dos Pneus",
   minY: 0,
