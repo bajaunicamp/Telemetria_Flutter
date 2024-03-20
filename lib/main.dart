@@ -41,7 +41,14 @@ class _MainAppState extends State<MainApp> {
             title: const Text("Telemetria Baja"),
             backgroundColor: const Color.fromARGB(255, 48, 158, 53),
           ),
-          body: Column(
+          body: Container(
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage("assets/images/background.jpeg"),
+              fit: BoxFit.cover,
+              )
+          ),  
+          child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -66,7 +73,8 @@ class _MainAppState extends State<MainApp> {
               widgetServidor()
             ],
           ),
-        ));
+        )
+    ));
   }
 
   String serverIP = "0.0.0.0";
