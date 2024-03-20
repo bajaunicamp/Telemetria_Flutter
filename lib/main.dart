@@ -210,7 +210,7 @@ class _MainAppState extends State<MainApp> {
         List<String> splitResponse = serverResponse.split(" ");
         String tipo = splitResponse[0];
         // Se for uma resposta de GPS
-        if (tipo.compareTo("[VELOCIDADE]") == 0){
+        if (tipo.compareTo("[VE]") == 0){
           print("Dados de velocidade recebidos");
           velocidade.inserirDado(double.parse(splitResponse[1]));
         }

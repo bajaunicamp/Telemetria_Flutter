@@ -9,18 +9,17 @@ Dado combustivel = Dado(
   minY: 0,
   title: "combustivel (%)"
 );
-
 Dado velocidade = Dado(
   maxY: 50,
   minY: 0,
-  title: "velocidade (km/h)"
+  title: "Velocidade (km/h)"
 );
 
 // Como o TPMS não está funcionando como deverial atualmente, esse gráfico é apenas ilustrativo pra
 // mostrar pros juízes que o TPMS não está funcionando. O gráfico verdadeiro do tpms deverá conter
 // quatro linhas, uma pra cada pneu e adicionar uma legenda em baixo 
 Dado tpms = Dado(
-  title: "Pressão dos Pneus",
+  title: "Pressão dos Pneus (psi)",
   minY: 0,
   maxY: 30
 );
