@@ -81,18 +81,26 @@ class _MapaState extends State<Mapa> {
 class PosicaoBaja with ChangeNotifier{
   double _latitude = -22.823140730111103;
   double _longitude = -47.064638387666776;
+  DateTime latitude_last_update = DateTime.now();
+  DateTime longitude_last_update = DateTime.now();
   Set<Marker> markers = { };
   
   void atualizarPosicao(double latitude, double longitude){
-    _latitude = latitude;
-    _longitude = longitude;
+    if(latitude != 0){
+      _latitude = latitude;
+      latitude_last_update = DateTime.now();
+    }
+    if(longitude != 0){
+      _longitude = longitude;
+      longitude_last_update = DateTime.now();
+    }
     markers.clear();
     markers.add(
       Marker(
         markerId: MarkerId("Tamayado"),
-        position: LatLng(latitude, longitude),
+        position: LatLng(_latitude, _longitude),
         infoWindow: InfoWindow(
-          title: "Tamayado\nPosição $latitude | $longitude"
+          title: "Tamayado\nPosição $_latitude | $_longitude"
         ),
       )
     );
