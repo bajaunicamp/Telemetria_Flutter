@@ -41,10 +41,11 @@ class _MainAppState extends State<MainApp> {
             title: const Text("Telemetria Baja"),
             backgroundColor: const Color.fromARGB(255, 48, 158, 53),
           ),
+          backgroundColor: Colors.transparent,
           body: Container(
           decoration: BoxDecoration(
             image: DecorationImage(
-              image: AssetImage("assets/images/background.jpeg"),
+              image: AssetImage("assets/background.jpeg"),
               fit: BoxFit.cover,
               )
           ),  
@@ -100,6 +101,8 @@ class _MainAppState extends State<MainApp> {
                     TextField(
                       decoration: InputDecoration(
                         border: OutlineInputBorder(),
+                        filled: true,
+                        fillColor: Colors.white,
                         hintText: "Server IP",
                       ),
                       controller: serverIP_controller,
@@ -107,6 +110,8 @@ class _MainAppState extends State<MainApp> {
                     TextField(
                       decoration: InputDecoration(
                         border: OutlineInputBorder(),
+                        filled: true,
+                        fillColor: Colors.white,
                         hintText: "Porta",
                       ),
                       controller: port_controller,
